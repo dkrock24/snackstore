@@ -1,58 +1,68 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Applaudo Studio Test
 
-## About Laravel
+- Folder Name
+	- snackstore / Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+- Run the nexts commands
+	- update composer
+	- php artisan serve
+	- php artisan migrate
+	- Insert one Role in Role Table /role.sql
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- If you want insert data in the products run the script /product.sql
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+- Create user
+	- Reference USER Secction "register" method
+		-> This generated the toket by postman copy and paste on security method
+		-> set postman Headers [key=Authorization, Value=Token]
+							   [key=Content-Type , Value=application/json]
 
-## Learning Laravel
+- ** You Are Ready to use the below methods **
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+- General Routes
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+	PostMan
 
-## Laravel Sponsors
+	ROLE / 
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+	- [ POST , localhost:8000/api/role 		 ](name)
+	- [ GET  , localhost:8000/api/role/{id}  ](id)
+	- [ GET  , localhost:8000/api/role/index  ]()
+	- [ PUT  , localhost:8000/api/role/{id}  ]({"id":1,"name_role": "Admin"}) postman - raw
+	- [ DELETE,localhost:8000/api/role/{id}  ](id)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Pulse Storm](http://www.pulsestorm.net/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
+	USER /
 
-## Contributing
+	- [ POST , localhost:8000/api/register 	 ](name,email,password,password_confirmation,role)
+	- [ POST , localhost:8000/api/login		 ](email,password)
+	- [ GET  , localhost:8000/api/user 		 ]() // user active
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+	PRODUCT /
 
-## Security Vulnerabilities
+	- [ GET  , localhost:8000/api/product_list ]() // All products
+	- [ GET  , localhost:8000/api/product/{id} ]() // Products By Id
+	- [ GET  , localhost:8000/api/product?page=1 ]() // Products By Pagination/2
+	- [ GET  , localhost:8000/api/product?page=1&name=puma ]() // Products By name with Pagination/2	
+	- [ DELETE,localhost:8000/api/product/1 ]() // Products Delete
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+	  - Needs  -> Authorization || Tocket
+	- [ POST , localhost:8000/api/product ](name,price,stock,description,status) form-data   || New Products
+	- [ POST , localhost:8000/api/product/{id} ]({ "id":27,tock_product":101}) postman - raw || Update Products 
 
-## License
+	PURSCHASE /
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+	  - Needs  -> Authorization || Tocket
+	- [ POST , localhost:8000/api/purchase](customer,product,quantity) form-data || New Purchase
+	- [ GET  , localhost:8000/api/purchase/{id}]() id || Get Detail of sales
+
+	LIKING /
+
+	  - Needs  -> Authorization || Tocket
+	- [ POST  , localhost:8000/api/product_linking ](product,customer) form-data || Like to Product
+
+	PRODUCT PRICE LOG /
+	
+	  - Needs  -> Authorization || Tocket
+	- [ POST  , localhost:8000/api/product/{id}]({"id":1,"price_product":0.75}) postman - raw || Product price log
+

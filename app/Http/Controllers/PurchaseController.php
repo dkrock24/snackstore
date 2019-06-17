@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Purchase;
 use App\PurchaseDetail;
@@ -58,7 +59,15 @@ class PurchaseController extends Controller
      */
     public function show($id)
     {
-        return Purchase::where('id',$id)->get();
+        //return Purchase::where('id',$id)->get();
+
+        $data = DB::table("purchases")
+                ->select("*")
+                ->join('purchase_details', 'purchase_details.id_purchase', '=', 'purchases.id')
+                ->join('users', 'users.id', '=', 'purchases.id_customer')
+                ->get();
+
+        return $data;
     }
 
     /**

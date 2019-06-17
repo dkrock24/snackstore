@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableProductPurchaseLog extends Migration
+class CreatePurchasesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateTableProductPurchaseLog extends Migration
      */
     public function up()
     {
-        Schema::create('product_purchase_logs', function (Blueprint $table) {
-            $table->increments('id_purchase',250);
-            $table->integer('id_product');
-            $table->integer('id_customer');
-            $table->integer('total_items');
+        Schema::create('purchases', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('id_customer')->unsigned()->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('purchases', function($table) {
+            $table->foreign('id_customer')->references('id')->on('users');
         });
     }
 
@@ -29,6 +31,6 @@ class CreateTableProductPurchaseLog extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_purchase_log');
+        Schema::dropIfExists('purchases');
     }
 }

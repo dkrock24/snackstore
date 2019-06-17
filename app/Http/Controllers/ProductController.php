@@ -25,7 +25,6 @@ class ProductController extends Controller
         if($request->name){
             $name = $request->name;
         }
-        
 
         If (!empty($request->input('page'))) {
             $page = $request->input('page');
@@ -48,8 +47,8 @@ class ProductController extends Controller
 
           $results = new \Illuminate\Pagination\LengthAwarePaginator(
             array_slice($data->toArray(), 
-                ($page - 1) * 1, 2), 
-                $product_total, 2, 
+                ($page - 1) * 3, 3), 
+                $product_total, 3, 
                 $page, 
                 ["path" => "search"]
             );
@@ -58,8 +57,21 @@ class ProductController extends Controller
     }
 
     public function countProducts(){
+        
+        // return total of stock of products
+
         $total = DB::select('select COUNT(*) as count from products where status_product = :status_product', ['status_product' => 1]);
         return  $numrows = $total[0]->count;
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function list(){
+        return Product::all();
     }
 
     /**
@@ -70,7 +82,6 @@ class ProductController extends Controller
     public function search(Response $request){
         
         return Product::where('id', 1)->get();
-
         //return Product::where('name_product', 'like', '%' . $request->('name'). '%' )->get();
 
     }
@@ -168,7 +179,7 @@ class ProductController extends Controller
             $productPriceLog = new ProductPriceLog();
 
             $productPriceLog->id_product = $product;
-            $productPriceLog->last_price = $newPrice;
+            $productPriceLog->last_price = $oldprice;
 
             // Save Model
             $productPriceLog->save();

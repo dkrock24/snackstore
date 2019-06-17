@@ -15,9 +15,14 @@ class CreateTableProductLinking extends Migration
     {
         Schema::create('product_linkings', function (Blueprint $table) {
             $table->increments('id_linking',250);
-            $table->integer('id_product');
-            $table->integer('id_customer');
+            $table->integer('id_product')->unsigned()->nullable();
+            $table->integer('id_customer')->unsigned()->nullable();
             $table->timestamps();
+        });
+
+        Schema::table('product_linkings', function($table) {
+            $table->foreign('id_product')->references('id')->on('products');
+            $table->foreign('id_customer')->references('id')->on('users');
         });
     }
 

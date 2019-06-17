@@ -14,10 +14,14 @@ class CreateTableProductPriceLog extends Migration
     public function up()
     {
         Schema::create('product_price_logs', function (Blueprint $table) {
-            $table->increments('id_price_log',250);
-            $table->string('id_product',250);
+            $table->increments('id_price_log',250);            
+            $table->integer('id_product')->unsigned()->nullable();           
             $table->double('last_price',8,2);
             $table->timestamps();
+        });
+
+        Schema::table('product_price_logs', function($table) {
+            $table->foreign('id_product')->references('id')->on('products');
         });
     }
 
