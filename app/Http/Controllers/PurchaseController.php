@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Purchase;
 use App\PurchaseDetail;
@@ -38,16 +39,21 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        $purchase = new Purchase;
+        if(auth()->user()->role != 1){
+            $purchase = new Purchase;
 
-        $purchase->id_customer = $request->customer;
+            $purchase->id_customer = auth()->user()->id;//$request->customer;
 
-        $succes = $purchase->save();
+            $succes = $purchase->save();
 
-        if($succes){
-            $this->savePurchaseDetail($purchase->id,$request);
-            
-            app('App\Http\Controllers\ProductController')->updateStock($request->product, $request->quantity);
+            if($succes){
+                $this->savePurchaseDetail($purchase->id,$request);
+                
+                app('App\Http\Controllers\ProductController')->updateStock($request->product, $request->quantity);
+            }
+            return "Purchase Done";
+        }else{
+            return "Only Customers can Purchase Products";
         }
     }
 

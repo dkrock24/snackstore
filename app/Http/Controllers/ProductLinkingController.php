@@ -46,8 +46,9 @@ class ProductLinkingController extends Controller
         if(!isset($exist[0]['id'])){
             // Save Model
             $productLinking->save();
+            return "Liking Product Done";
         }else{
-            echo 1;
+            return " Already Exist Liking Product";
         }
     }
 

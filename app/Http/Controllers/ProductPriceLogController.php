@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\ProductPriceLog;
 
 class ProductPriceLogController extends Controller
@@ -52,7 +53,11 @@ class ProductPriceLogController extends Controller
      */
     public function show($id)
     {
-        return ProductPriceLog::where('id_product', $id )->get();
+        if(auth()->user()->role == 1){
+            return ProductPriceLog::where('id_product', $id )->get();
+        }else{
+            return "Only Admin Can see the Product Price Log";
+        }
     }
 
     /**

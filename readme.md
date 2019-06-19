@@ -7,10 +7,12 @@
 - Run the nexts commands
 	- update composer
 	- php artisan serve
+	- Create database and products the sql file is in the root directory.
 	- php artisan migrate
 	- Insert one Role in Role Table /role.sql
 
 - If you want insert data in the products run the script /product.sql
+- If you want insert data in the users run the script /user.sql
 
 - Create user
 	- Reference USER Secction "register" method
@@ -48,7 +50,7 @@
 
 	  - Needs  -> Authorization || Tocket
 	- [ POST , localhost:8000/api/product ](name,price,stock,description,status) form-data   || New Products
-	- [ POST , localhost:8000/api/product/{id} ]({ "id":27,tock_product":101}) postman - raw || Update Products 
+	- [ PUT  , localhost:8000/api/product/{id} ]({ "id":27,tock_product":101}) postman - raw || Update Products 
 
 	PURSCHASE /
 

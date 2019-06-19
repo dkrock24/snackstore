@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
@@ -14,6 +15,7 @@ use App\ProductLinking;
 
 class ProductController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +23,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
+
         $name = "";
         if($request->name){
             $name = $request->name;
@@ -40,7 +43,9 @@ class ProductController extends Controller
           ->select("products.*",
                 DB::raw("(SELECT COUNT(*) FROM product_linkings AS pl2 WHERE pl2.id_product = products.id ) as total")
                 )
+          ->where('status_product', 1)       
           ->where('products.name_product', 'like', '%' . $name . '%' )
+          ->orderBy('total','desc')
           ->orderBy('products.name_product','asc')
           ->orderBy('total','asc')
           ->get();
@@ -71,7 +76,17 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function list(){
-        return Product::all();
+        $data = DB::table("products")
+          ->select("products.*",
+                DB::raw("(SELECT COUNT(*) FROM product_linkings AS pl2 WHERE pl2.id_product = products.id ) as total")
+                )
+          ->where('status_product', 1)       
+          ->orderBy('total','desc')
+          ->orderBy('products.name_product','asc')
+          ->orderBy('total','asc')
+          ->get();
+
+          return $data;
     }
 
     /**
@@ -113,8 +128,15 @@ class ProductController extends Controller
         $product->description_product = $request->description;
         $product->status_product = $request->status;
 
-        //Save model
-        $product->save();
+        // Is Admin
+        if(auth()->user()->role == 1){
+            //Save model
+            $product->save();
+            return "New Product has been created";
+        }else{
+            return "Only Admin can Add Products";
+        }
+        
     }
 
     /**
@@ -148,16 +170,25 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $newPrice = Input::get('price_product');
-        if($newPrice){
+        if(auth()->user()->role == 1){
 
-            $product    = Input::get('id');
+            $newPrice = Input::get('price_product');
 
-            $oldPrice   = Product::where('id', $id)->get();
+            if($newPrice){
 
-            $this->priceLog($product , $newPrice, $oldPrice[0]->price_product );
+                $product    = Input::get('id');
+
+                $oldPrice   = Product::where('id', $id)->get();
+
+                $this->priceLog($product , $newPrice, $oldPrice[0]->price_product );
+            }
+
+            Product::where('id', $id)->update(Input::all());
+
+            return "Products has been updated";
+        }else{
+            return "Only Admin can update products";
         }
-        Product::where('id', $id)->update(Input::all());
     }
 
     /**
@@ -168,8 +199,13 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = Product::find($id);
-        $product->delete();
+        if(auth()->user()->role == 1){
+            $product = Product::find($id);
+            $product->delete();
+            return "Products has been deleted";
+        }else{
+            return "Only Admin can delete products";
+        }
     }
 
     public function priceLog($product , $newPrice, $oldprice){

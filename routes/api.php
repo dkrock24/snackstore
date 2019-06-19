@@ -31,7 +31,7 @@ Route::group(['middleware' => ['jwt.verify']], function() {
     // PRODUCT  SAFE METHOD
     Route::delete('product/{id}', 'ProductController@destroy');
     Route::post('product', 'ProductController@store');
-    Route::post('product/{id}', 'ProductController@update');
+    Route::put('product/{id}', 'ProductController@update');
     Route::resource('product_price_log', 'ProductPriceLogController');
 
     // PURCHASE SAFE METHOD
@@ -55,9 +55,6 @@ Route::get('product', 'ProductController@index');
 
 Route::resource('purchase_detail', 'PurchaseDetailController');
 Route::resource('stock', 'StockController');
-
-//Route::resource('customer', 'CustomerController');
-//Route::resource('product_purchase_log', 'ProductPurchaseLogController');
 
 
 

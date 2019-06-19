@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Role;
 
@@ -15,7 +16,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return Role::all();
+        if(auth()->user()->role == 1){
+            return Role::all();
+        }else{
+            return "Only Admin can show Role";
+        }
     }
 
     /**
@@ -42,7 +47,13 @@ class RoleController extends Controller
         $role->name_role = $request->name;
 
         //Save model
-        $role->save();
+        if(auth()->user()->role == 1){
+            $role->save();
+            return "New Role has been created";
+        }else{
+            return "Only Admin can create Role";
+        }
+        
     }
 
     /**
@@ -53,7 +64,11 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        return Role::where('id', $id)->get();
+        if(auth()->user()->role == 1){
+            return Role::where('id_role', $id)->get();
+        }else{
+            return "Only Admin can see Role";
+        }
     }
 
     /**
@@ -76,7 +91,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Role::where('id', $id)->update(Input::all());
+        if(auth()->user()->role == 1){
+            Role::where('id_role', $id)->update(Input::all());
+            return "New role has been updated";
+        }else{
+            return "Only Admin can update Role";
+        }
     }
 
     /**
@@ -88,6 +108,12 @@ class RoleController extends Controller
     public function destroy($id)
     {
         $role = Role::find($id);
-        $role->delete();
+        if(auth()->user()->role == 1){
+            $role->delete();
+            return "Role has been deleted";
+        }else{
+            return "Only Admin can delete Role";
+        }
+        
     }
 }
